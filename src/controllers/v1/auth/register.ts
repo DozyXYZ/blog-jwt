@@ -1,5 +1,6 @@
 import { logger } from "@/lib/winston";
 import config from "@/config";
+import { genUsername } from "@/utils";
 
 import User from "@/models/user";
 
@@ -11,11 +12,22 @@ type UserData = Pick<IUser, "email" | "password" | "role">;
 const register = async (req: Request, res: Response): Promise<void> => {
   const { email, password, role } = req.body as UserData;
 
-  console.log(email, password, role);
-
   try {
+    const username = genUsername();
+
+    const newUser = await User.create({
+      username,
+      email,
+      password,
+      role,
+    });
+
     res.status(201).json({
-      message: "New user created successfully!",
+      user: {
+        username: newUser.username,
+        email: newUser.email,
+        role: newUser.role,
+      },
     });
   } catch (err) {
     res.status(500).json({
