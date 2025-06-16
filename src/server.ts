@@ -9,6 +9,8 @@ import limiter from "@/lib/express_rate_limit";
 
 import type { CorsOptions } from "cors";
 
+import v1Routes from "@/routes/v1";
+
 const app = express();
 
 const corsOptions: CorsOptions = {
@@ -35,9 +37,7 @@ app.use(limiter);
 
 (async () => {
   try {
-    app.get("/", (req, res) => {
-      res.json({ message: "Welcome to the Blog API!" });
-    });
+    app.use("/api/v1", v1Routes);
 
     app.listen(config.PORT, () => {
       console.log(`Server is running on http://localhost:${config.PORT}`);
@@ -50,3 +50,15 @@ app.use(limiter);
     }
   }
 })();
+
+const handleServerShutdown = async () => {
+  try {
+    console.log("Server SHUTDOWN");
+    process.exit(0);
+  } catch (err) {
+    console.log("Error during server shutdown:", err);
+  }
+};
+
+process.on("SIGTERM", handleServerShutdown);
+process.on("SIGINT", handleServerShutdown);
