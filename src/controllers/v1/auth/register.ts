@@ -8,12 +8,24 @@ import Token from "@/models/token";
 
 import type { Request, Response } from "express";
 import type { IUser } from "@/models/user";
-import token from "@/models/token";
 
 type UserData = Pick<IUser, "email" | "password" | "role">;
 
 const register = async (req: Request, res: Response): Promise<void> => {
   const { email, password, role } = req.body as UserData;
+
+  if (role === "admin" && !config.WHITELISTED_ADMIN_MAIL.includes(email)) {
+    res.status(403).json({
+      code: "AuthorizationError",
+      message: "You cannot register as an admin",
+    });
+
+    logger.warn(
+      `User with email ${email} attempted to register as admin but is not whitelisted`
+    );
+
+    return;
+  }
 
   try {
     const username = genUsername();
