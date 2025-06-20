@@ -69,7 +69,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
   } catch (err) {
     res.status(500).json({
       code: "ServerError",
-      message: "internal Server Error",
+      message: "Internal Server Error",
       error: err,
     });
 
