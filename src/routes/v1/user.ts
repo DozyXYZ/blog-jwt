@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, query } from "express-validator";
 
 import authenticate from "@/middlewares/authenticate";
 import authorize from "@/middlewares/authorize";
@@ -7,6 +7,7 @@ import authorize from "@/middlewares/authorize";
 import getCurrentUser from "@/controllers/v1/user/get_current_user";
 import updateCurrentuser from "@/controllers/v1/user/update_current_user";
 import deleteCurrentUser from "@/controllers/v1/user/delete_current_user";
+import getAllUsers from "@/controllers/v1/user/get_all_users";
 
 import User from "@/models/user";
 import validationError from "@/middlewares/validationError";
@@ -88,6 +89,22 @@ router.delete(
   authenticate,
   authorize(["admin", "user"]),
   deleteCurrentUser
+);
+
+router.get(
+  "/",
+  authenticate,
+  authorize(["admin"]),
+  query("limit")
+    .optional()
+    .isInt({ min: 1, max: 50 })
+    .withMessage("Limit must be between 1 and 50"),
+  query("offset")
+    .optional()
+    .isInt({ min: 0 })
+    .withMessage("Offset must be a non-negative integer"),
+  validationError,
+  getAllUsers
 );
 
 export default router;
