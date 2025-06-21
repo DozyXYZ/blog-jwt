@@ -6,6 +6,7 @@ import authorize from "@/middlewares/authorize";
 
 import getCurrentUser from "@/controllers/v1/user/get_current_user";
 import updateCurrentuser from "@/controllers/v1/user/update_current_user";
+import deleteCurrentUser from "@/controllers/v1/user/delete_current_user";
 
 import User from "@/models/user";
 import validationError from "@/middlewares/validationError";
@@ -80,6 +81,13 @@ router.put(
     .withMessage("URL cannot exceed 100 characters"),
   validationError,
   updateCurrentuser
+);
+
+router.delete(
+  "/current",
+  authenticate,
+  authorize(["admin", "user"]),
+  deleteCurrentUser
 );
 
 export default router;
