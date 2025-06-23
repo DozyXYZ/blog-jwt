@@ -16,6 +16,9 @@ const config = {
   WHITELISTED_ADMIN_MAIL: "dotuan14747@gmail.com",
   defaultResLimit: 20,
   defaultResOffset: 0,
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME!,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY!,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET!,
 };
 
 export default config;

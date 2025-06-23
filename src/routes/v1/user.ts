@@ -3,6 +3,7 @@ import { body, query, param } from "express-validator";
 
 import authenticate from "@/middlewares/authenticate";
 import authorize from "@/middlewares/authorize";
+import validationError from "@/middlewares/validationError";
 
 import getCurrentUser from "@/controllers/v1/user/get_current_user";
 import updateCurrentuser from "@/controllers/v1/user/update_current_user";
@@ -12,7 +13,6 @@ import getUserById from "@/controllers/v1/user/get_user_by_id";
 import deleteUserById from "@/controllers/v1/user/delete_user_by_id";
 
 import User from "@/models/user";
-import validationError from "@/middlewares/validationError";
 
 const router = Router();
 
