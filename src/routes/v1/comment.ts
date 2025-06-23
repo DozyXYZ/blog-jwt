@@ -6,6 +6,7 @@ import authorize from "@/middlewares/authorize";
 import validationError from "@/middlewares/validationError";
 
 import createComment from "@/controllers/v1/comment/create_comment";
+import getCommentsByBlog from "@/controllers/v1/comment/get_comments_by_blog";
 
 const router = Router();
 
@@ -17,6 +18,15 @@ router.post(
   body("content").trim().notEmpty().withMessage("Content is required"),
   validationError,
   createComment
+);
+
+router.get(
+  "/blog/:blogId",
+  authenticate,
+  authorize(["admin", "user"]),
+  param("blogId").isMongoId().withMessage("Invalid blog ID"),
+  validationError,
+  getCommentsByBlog
 );
 
 export default router;
