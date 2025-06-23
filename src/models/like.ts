@@ -10,9 +10,11 @@ const likeSchema = new Schema<ILike>({
   blogId: {
     type: Schema.Types.ObjectId,
   },
+
   commentId: {
     type: Schema.Types.ObjectId,
   },
+
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
