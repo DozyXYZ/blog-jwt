@@ -16,6 +16,45 @@ import User from "@/models/user";
 
 const router = Router();
 
+/**
+ * @swagger
+ * /users/current:
+ *   get:
+ *     summary: Get the current authenticated user's profile
+ *     tags:
+ *       - Users
+ *     security:
+ *       - Bearer: []
+ *     responses:
+ *       200:
+ *         description: Current user profile
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *       401:
+ *         $ref: '#/components/responses/AuthenticationError'
+ *       403:
+ *         $ref: '#/components/responses/AuthorizationError'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
+ */
 router.get(
   "/current",
   authenticate,
@@ -23,6 +62,91 @@ router.get(
   getCurrentUser
 );
 
+/**
+ * @swagger
+ * /users/current:
+ *   put:
+ *     summary: Update the current authenticated user's profile
+ *     tags:
+ *       - Users
+ *     security:
+ *       - Bearer: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *               first_name:
+ *                 type: string
+ *               last_name:
+ *                 type: string
+ *               website:
+ *                 type: string
+ *               twitter:
+ *                 type: string
+ *               instagram:
+ *                 type: string
+ *               facebook:
+ *                 type: string
+ *               youtube:
+ *                 type: string
+ *               linkedin:
+ *                 type: string
+ *               github:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       401:
+ *         $ref: '#/components/responses/AuthenticationError'
+ *       403:
+ *         $ref: '#/components/responses/AuthorizationError'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: UserNotFound
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
+ */
 router.put(
   "/current",
   authenticate,
@@ -86,6 +210,38 @@ router.put(
   updateCurrentuser
 );
 
+/**
+ * @swagger
+ * /users/current:
+ *   delete:
+ *     summary: Delete the current authenticated user's account and all their blogs
+ *     tags:
+ *       - Users
+ *     security:
+ *       - Bearer: []
+ *     responses:
+ *       204:
+ *         description: User account and all blogs deleted successfully (no content)
+ *       401:
+ *         $ref: '#/components/responses/AuthenticationError'
+ *       403:
+ *         $ref: '#/components/responses/AuthorizationError'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
+ */
 router.delete(
   "/current",
   authenticate,
@@ -93,6 +249,66 @@ router.delete(
   deleteCurrentUser
 );
 
+/**
+ * @swagger
+ * /users:
+ *   get:
+ *     summary: Get all users with pagination - ADMIN ONLY
+ *     tags:
+ *       - Users
+ *     security:
+ *       - Bearer: []
+ *     parameters:
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           default: 20
+ *         description: Maximum number of users to return
+ *       - in: query
+ *         name: offset
+ *         schema:
+ *           type: integer
+ *           default: 0
+ *         description: Number of users to skip
+ *     responses:
+ *       200:
+ *         description: List of users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 limit:
+ *                   type: integer
+ *                 offset:
+ *                   type: integer
+ *                 total:
+ *                   type: integer
+ *                 users:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *       401:
+ *         $ref: '#/components/responses/AuthenticationError'
+ *       403:
+ *         $ref: '#/components/responses/AuthorizationError'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
+ */
 router.get(
   "/",
   authenticate,
@@ -109,6 +325,63 @@ router.get(
   getAllUsers
 );
 
+/**
+ * @swagger
+ * /users/{userId}:
+ *   get:
+ *     summary: Get a user by their ID - ADMIN ONLY
+ *     tags:
+ *       - Users
+ *     security:
+ *       - Bearer: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user to retrieve
+ *     responses:
+ *       200:
+ *         description: User found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *       401:
+ *         $ref: '#/components/responses/AuthenticationError'
+ *       403:
+ *         $ref: '#/components/responses/AuthorizationError'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: NotFound
+ *                 message:
+ *                   type: string
+ *                   example: User not found
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
+ */
 router.get(
   "/:userId",
   authenticate,
@@ -118,6 +391,45 @@ router.get(
   getUserById
 );
 
+/**
+ * @swagger
+ * /users/{userId}:
+ *   delete:
+ *     summary: Delete a user by their ID - ADMIN ONLY
+ *     tags:
+ *       - Users
+ *     security:
+ *       - Bearer: []
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the user to delete
+ *     responses:
+ *       204:
+ *         description: User account and all blogs deleted successfully (no content)
+ *       401:
+ *         $ref: '#/components/responses/AuthenticationError'
+ *       403:
+ *         $ref: '#/components/responses/AuthorizationError'
+ *       404:
+ *         $ref: '#/components/responses/NotFound'
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
+ */
 router.delete(
   "/:userId",
   authenticate,

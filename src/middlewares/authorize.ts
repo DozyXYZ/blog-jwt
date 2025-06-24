@@ -6,6 +6,37 @@ import type { Request, Response, NextFunction } from "express";
 
 export type AuthRole = "admin" | "user";
 
+/**
+ * @swagger
+ * components:
+ *   responses:
+ *     AuthorizationError:
+ *       description: Access denied, insufficient permissions
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 example: AuthorizationError
+ *               message:
+ *                 type: string
+ *                 example: Access denied, insufficient permissions
+ *     NotFound:
+ *       description: User not found
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 example: NotFound
+ *               message:
+ *                 type: string
+ *                 example: User not found
+ */
 const authorize = (roles: AuthRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     const userId = req.userId;

@@ -17,10 +17,12 @@ const deleteUserById = async (req: Request, res: Response): Promise<void> => {
       .exec();
     const publicIds = blogs.map(({ banner }) => banner.publicId);
 
-    await cloudinary.api.delete_resources(publicIds);
-    logger.info("Multiple banner images deleted from Cloudinary", {
-      publicIds,
-    });
+    if (publicIds.length > 0) {
+      await cloudinary.api.delete_resources(publicIds);
+      logger.info("Multiple banner images deleted from Cloudinary", {
+        publicIds,
+      });
+    }
 
     await Blog.deleteMany({ author: userId });
     logger.info("All blogs by user deleted", { userId, blogs });
