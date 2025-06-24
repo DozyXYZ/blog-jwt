@@ -64,16 +64,7 @@ const router = Router();
  *                 accessToken:
  *                   type: string
  *       400:
- *        description: Validation error or bad request
- *        content:
- *          application/json:
- *            schema:
- *              type: object
- *              properties:
- *                code:
- *                  type: string
- *                message:
- *                  type: string
+ *        $ref: '#/components/responses/ValidationError'
  *       403:
  *         description: Not authorized to register as admin
  *         content:
@@ -134,6 +125,86 @@ router.post(
   register
 );
 
+/**
+ * @swagger
+ * /auth/login:
+ *   post:
+ *     summary: Login a user with email and password
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 format: email
+ *               password:
+ *                 type: string
+ *                 format: password
+ *           examples:
+ *             user:
+ *               summary: Regular user login
+ *               value:
+ *                 email: user@example.com
+ *                 password: StrongPassword123!
+ *             admin:
+ *               summary: Admin user login
+ *               value:
+ *                 email: admin@example.com
+ *                 password: StrongPassword123!
+ *     responses:
+ *       201:
+ *         description: Login successful
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     username:
+ *                       type: string
+ *                     email:
+ *                       type: string
+ *                     role:
+ *                       type: string
+ *                 accessToken:
+ *                   type: string
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       404:
+ *         description: User not found
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
+ */
 router.post(
   "/login",
   body("email")
@@ -177,6 +248,52 @@ router.post(
   login
 );
 
+/**
+ * @swagger
+ * /auth/refresh-token:
+ *   post:
+ *     summary: Refresh access token using a valid refresh token cookie
+ *     tags:
+ *       - Authentication
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       200:
+ *         description: Access token refreshed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 accessToken:
+ *                   type: string
+ *       400:
+ *         $ref: '#/components/responses/ValidationError'
+ *       401:
+ *         description: Invalid or expired refresh token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                 message:
+ *                   type: string
+ *                 error:
+ *                   type: object
+ */
 router.post(
   "/refresh-token",
   cookie("refreshToken")
@@ -188,6 +305,39 @@ router.post(
   refreshToken
 );
 
+/**
+ * @swagger
+ * /auth/logout:
+ *   post:
+ *     summary: Log the user out
+ *     description: Clears the refresh token cookie and invalidates the token in the database.
+ *     tags:
+ *       - Authentication
+ *     security:
+ *       - Bearer: []
+ *     requestBody:
+ *       required: false
+ *     responses:
+ *       204:
+ *         description: User logged out successfully (no content)
+ *       401:
+ *         $ref: '#/components/responses/AuthenticationError'
+ *       500:
+ *         description: Internal Server Error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 code:
+ *                   type: string
+ *                   example: ServerError
+ *                 message:
+ *                   type: string
+ *                   example: Internal Server Error
+ *                 error:
+ *                   type: object
+ */
 router.post("/logout", authenticate, logout);
 
 export default router;

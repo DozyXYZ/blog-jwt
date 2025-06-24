@@ -45,6 +45,9 @@ app.use(limiter);
 
     app.listen(config.PORT, () => {
       logger.info(`Server is running on http://localhost:${config.PORT}`);
+      logger.info(
+        `Swagger JSON requested: http://localhost:${config.PORT}/api/v1/swagger/json`
+      );
     });
   } catch (err) {
     logger.error("Failed to start the server:", err);

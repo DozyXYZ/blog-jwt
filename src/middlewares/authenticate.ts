@@ -6,6 +6,24 @@ import { logger } from "@/lib/winston";
 import type { Request, Response, NextFunction } from "express";
 import type { Types } from "mongoose";
 
+/**
+ * @swagger
+ * components:
+ *   responses:
+ *     AuthenticationError:
+ *       description: Authentication failed or access token is invalid/expired
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 example: AuthenticationError
+ *               message:
+ *                 type: string
+ *                 example: Access token invalid or expired
+ */
 const authenticate = async (
   req: Request,
   res: Response,
