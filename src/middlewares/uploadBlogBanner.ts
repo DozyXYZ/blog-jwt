@@ -6,6 +6,74 @@ import Blog from "@/models/blog";
 import type { Request, Response, NextFunction } from "express";
 import type { UploadApiErrorResponse } from "cloudinary";
 
+/**
+ * @swagger
+ * components:
+ *   requestBodies:
+ *     CreateBlog:
+ *       description: Blog creation form with an image file for Cloudinary upload
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - title
+ *               - content
+ *               - status
+ *               - banner_image
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "My First Blog"
+ *               content:
+ *                 type: string
+ *                 example: "This is the full blog content with markdown support."
+ *               status:
+ *                 type: string
+ *                 enum: [draft, published]
+ *                 example: "published"
+ *               banner_image:
+ *                 type: string
+ *                 format: binary
+ *                 description: Image file to upload (jpg, jpeg, png, or webp). This will be uploaded to Cloudinary.
+ *     UpdateBlog:
+ *       description: Blog update form with an optional image file for Cloudinary upload
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               title:
+ *                 type: string
+ *                 example: "Updated Blog Title"
+ *               content:
+ *                 type: string
+ *                 example: "Updated blog content with markdown support."
+ *               status:
+ *                 type: string
+ *                 enum: [draft, published]
+ *                 example: "published"
+ *               banner_image:
+ *                 type: string
+ *                 format: binary
+ *                 description: (Optional) New image file to upload (jpg, jpeg, png, or webp). This will be uploaded to Cloudinary.
+ *   responses:
+ *     BlogBannerTooLarge:
+ *       description: Uploaded blog banner image exceeds 2 MB limit
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               code:
+ *                 type: string
+ *                 example: ValidationError
+ *               message:
+ *                 type: string
+ *                 example: File size cannot exceed 2 MB
+ */
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
 
 const uploadBlogBanner = (method: "post" | "put") => {
