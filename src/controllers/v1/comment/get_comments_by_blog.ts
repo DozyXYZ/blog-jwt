@@ -1,7 +1,6 @@
 import { logger } from "@/lib/winston";
 
 import Blog from "@/models/blog";
-import comment from "@/models/comment";
 import Comment from "@/models/comment";
 
 import type { Request, Response } from "express";
