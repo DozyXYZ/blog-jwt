@@ -328,7 +328,7 @@ router.get(
  *       $ref: '#/components/requestBodies/UpdateBlog'
  *     responses:
  *       201:
- *         description: Blog created successfully
+ *         description: Blog updated successfully
  *       400:
  *         $ref: '#/components/responses/ValidationError'
  *       401:
@@ -408,7 +408,7 @@ router.put(
  *       403:
  *         $ref: '#/components/responses/AuthorizationError'
  *       404:
- *         description: Blog not found
+ *         description: Blog / User not found
  *         content:
  *           application/json:
  *             schema:
