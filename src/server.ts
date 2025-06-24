@@ -46,6 +46,9 @@ app.use(limiter);
     app.listen(config.PORT, () => {
       logger.info(`Server is running on http://localhost:${config.PORT}`);
       logger.info(
+        `API documentation available at: http://localhost:${config.PORT}/api/v1/swagger`
+      );
+      logger.info(
         `Swagger JSON requested: http://localhost:${config.PORT}/api/v1/swagger/json`
       );
     });

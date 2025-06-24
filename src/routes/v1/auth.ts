@@ -35,15 +35,25 @@ const router = Router();
  *               email:
  *                 type: string
  *                 format: email
- *                 example: user@example.com
  *               password:
  *                 type: string
  *                 format: password
- *                 example: StrongPassword123!
  *               role:
  *                 type: string
  *                 enum: [user, admin]
- *                 example: user
+ *           examples:
+ *             user:
+ *               summary: Register as user
+ *               value:
+ *                 email: user@example.com
+ *                 password: StrongPassword123!
+ *                 role: user
+ *             admin:
+ *               summary: Register as admin
+ *               value:
+ *                 email: admin@example.com
+ *                 password: StrongPassword123!
+ *                 role: admin
  *     responses:
  *       201:
  *         description: User registered successfully
